@@ -1,0 +1,1 @@
+CREATE TABLE sensorsdemo.sensors(name text PRIMARY KEY, type text);

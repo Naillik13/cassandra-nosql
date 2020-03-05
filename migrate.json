@@ -1,0 +1,16 @@
+{
+  "migrationsDir": "cassandra/schema/migrations",
+  "quiet": false,
+  "cassandra": {
+    "contactPoints": [ "127.0.0.1" ],
+    "datacenterName": "datacenter1",
+    "useSingleNode": false,
+    "keyspace": "sensorsdemo",
+    "protocolOptions": {
+      "port": 9042
+    },
+    "socketOptions": {
+      "connectTimeout": 15000
+    }
+  }
+}
