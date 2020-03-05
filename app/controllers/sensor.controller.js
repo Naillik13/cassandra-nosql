@@ -2,46 +2,87 @@ const Sensor = require('../mappers/sensor.mapper');
 const cassandra = require('cassandra-driver');
 const TimeUuid = cassandra.types.TimeUuid;
 
-// Create and Save a new Beer
+// Create and Save a new Sensor
 exports.create = (req, res) => {
 
-    // Create a Sensor
-    const sensor = {
-        name: req.body.name,
-        sensorId: TimeUuid.now(),
-        type: req.body.type
-    };
+    let sensor = req.body;
+    sensor.name = sensor.name.split(" ").join("_").toLowerCase();
 
-    // Save Beer in the database
+    // Save Sensor in the database
     Sensor.insert(sensor)
-        .then(data => {
-            res.status(201).send(data);
+        .then(_ => {
+            res.status(201).send();
         }).catch(err => {
         console.log(err);
 
             res.status(500).send({
-                message: err.message || "Some error occurred while creating the Beer."
+                message: err.message || "Some error occurred while creating the Sensor."
             });
         });
 
 };
 
-// Retrieve and return all beers from the database.
+// Retrieve and return all sensors from the database.
 exports.findAll = (req, res) => {
-
+    Sensor.findAll()
+        .then(response => {
+            res.send(response._rs.rows);
+        }).catch(err => {
+        res.status(500).send({
+            message: err.message || "Some error occurred while retrieving sensors."
+        });
+    });
 };
 
-// Find a single beer with a beerId
 exports.findOne = (req, res) => {
-
+    Sensor.find({name: req.params.sensorName})
+        .then(response => {
+            console.log(response);
+            if(!response) {
+                return res.status(404).send({
+                    message: req.params.sensorName + " not found"
+                });
+            }
+            return res.status(200).send(response._rs.rows[0]);
+        }).catch(err => {
+            console.log(err);
+            return res.status(500).send({
+                message: "Error retrieving sensor"
+            });
+        });
 };
 
-// Update a beer identified by the beerId in the request
 exports.update = (req, res) => {
+    let sensor = req.body;
+    sensor.name = sensor.name.split(" ").join("_").toLowerCase();
 
+    // Save Sensor in the database
+    Sensor.update(sensor)
+        .then(_ => {
+            res.status(201).send();
+        }).catch(err => {
+        console.log(err);
+
+        res.status(500).send({
+            message: err.message || "Some error occurred while updating the Sensor."
+        });
+    });
 };
 
-// Delete a beer with the specified beerId in the request
 exports.delete = (req, res) => {
-
+    Sensor.remove({name: req.params.sensorName})
+        .then(response => {
+            console.log(response);
+            if(!response) {
+                return res.status(404).send({
+                    message: req.params.sensorName + " not found"
+                });
+            }
+            return res.status(200).send({message: req.params.sensorName + " deleted successfully"});
+        }).catch(err => {
+        console.log(err);
+        return res.status(500).send({
+            message: "Error deleting sensor"
+        });
+    });
 };
