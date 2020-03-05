@@ -1,4 +1,4 @@
-const Sensor = require('../models/sensor.model');
+const Sensor = require('../mappers/sensor.mapper');
 const cassandra = require('cassandra-driver');
 const TimeUuid = cassandra.types.TimeUuid;
 
