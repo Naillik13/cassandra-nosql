@@ -8,6 +8,10 @@ const mappingOptions = {
         'Sensor': {
             tables: ['sensors'],
             mappings: new UnderscoreCqlToCamelCaseMappings()
+        },
+        'Data': {
+            tables: ['datas'],
+            mappings: new UnderscoreCqlToCamelCaseMappings()
         }
     }
 };

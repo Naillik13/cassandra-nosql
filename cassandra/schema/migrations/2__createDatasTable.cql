@@ -1,0 +1,1 @@
+CREATE TABLE sensorsdemo.datas(sensor_name text, type text, timestamp timestamp, value text, PRIMARY KEY(sensor_name, type, timestamp));
